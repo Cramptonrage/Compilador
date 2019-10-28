@@ -650,6 +650,7 @@ namespace analizador_gramaticaunidad1
         private void pictureBox5_Click(object sender, EventArgs e)
         {
             consola.Text = "   ";
+            //cambio1
             correr();
         }
 
