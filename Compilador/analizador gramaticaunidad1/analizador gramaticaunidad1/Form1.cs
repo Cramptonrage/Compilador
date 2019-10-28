@@ -406,11 +406,12 @@ namespace analizador_gramaticaunidad1
                     return false;
 
                 }
-                for (int j = 0; j < tamanolista; j++)
+                for (int j = 0; j < vnombre.Count; j++)
                 {
+                        MessageBox.Show(vnombre.ElementAt(j) + " -" + nombre);
                     if (vnombre.ElementAt(j).Equals(nombre) && tipo != "")
                     {
-                        Program.excepcion = "NO SE PUEDE DECLARAR LA MISMA VARIABLE";
+                        consola.Text="NO SE PUEDE DECLARAR LA MISMA VARIABLE";
                         return false;
                     }
                     if (tipo.Equals("") && nombre.Equals(vnombre.ElementAt(j)))
