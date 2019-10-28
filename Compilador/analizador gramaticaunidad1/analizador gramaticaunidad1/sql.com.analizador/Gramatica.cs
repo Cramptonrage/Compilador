@@ -183,7 +183,7 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
 
 
             // MAIN.Rule = ToTerm("public static void main(String []args){") + DECLARACION + ToTerm("}");
-            MAIN.Rule = ToTerm("public static void main(String []args){") + DECLARACION + ToTerm("}");
+            MAIN.Rule = ToTerm("public static void main(String []args){") + DECLARACION + ToTerm("}endmain");
 
 
            

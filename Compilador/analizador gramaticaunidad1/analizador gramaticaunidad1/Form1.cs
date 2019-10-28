@@ -355,25 +355,31 @@ namespace analizador_gramaticaunidad1
         }
 
         public bool norepetir(String entrada)
-        {  
-            vnombre.Clear();
-            vvalor.Clear();
-            vtipo.Clear();
+        {
             int retorno = 0;
 
             String[] separar;
-
+            MessageBox.Show(entrada);
             ktf.Kuto scrapper = new ktf.Kuto(entrada);
-            scrapper = scrapper.Extract("public static void main(String []args){", "}");
+         //   scrapper = scrapper.Extract("public static void main(String []args){", "}");
 
-            separar = scrapper.ToString().Split(':');
+            separar = scrapper.ToString().Split(';');
             int tamanolista = 0;
-            for (int i = 1; i < separar.Length; i++)
+
+            for (int i = 0; i < separar.Length; i++)
             {
+                MessageBox.Show("lol "+separar[i]);
+            }
+            for (int i = 0; i < separar.Length; i++)
+            {
+                if (!separar[i].Replace(" ","").Equals("")) { 
+                MessageBox.Show(separar[i]);
                 ktf.Kuto scrapper2 = new ktf.Kuto(separar[i]);
-                String tipo = scrapper2.Extract("", " ").ToString();
+                String tipo = scrapper2.Extract(":", " ").ToString();
+                MessageBox.Show(tipo);
                 String nombre = scrapper2.Extract(tipo, "=").ToString();
-                String valor = scrapper2.Extract("=", ";").ToString();
+                MessageBox.Show(nombre);
+                String valor = scrapper2.Extract("=", "").ToString();
                 tipo = tipo.Replace(" ", "");
                 nombre = nombre.Replace(" ", "");
                 valor = valor.Replace(" ", "");
@@ -382,7 +388,7 @@ namespace analizador_gramaticaunidad1
                 {
                     tipo = scrapper2.Extract("", " ").ToString();
                     tipo = tipo.Replace(" ", "");
-                    nombre = scrapper2.Extract(tipo, ";").ToString();
+                    nombre = scrapper2.Extract(tipo, "").ToString();
                     nombre = nombre.Replace(" ", "");
 
                 }
@@ -398,7 +404,7 @@ namespace analizador_gramaticaunidad1
                 {
                     Program.excepcion = "NO SE PUEDEN DECLARAR PALABRAS RESERVADAS";
                     return false;
-                    
+
                 }
                 for (int j = 0; j < tamanolista; j++)
                 {
@@ -427,15 +433,15 @@ namespace analizador_gramaticaunidad1
                                 Convert.ToBoolean(valor);
                             }
 
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             return false;
                         }
-                         
+
                         break;
                     }
                     else
                     {
-                        if (tipo.Equals("")&&retorno!=1)
+                        if (tipo.Equals("") && retorno != 1)
                         {
                             retorno = 3;
                         } } }
@@ -443,6 +449,7 @@ namespace analizador_gramaticaunidad1
                 vnombre.Add(nombre);
                 vvalor.Add(valor);
                 tamanolista++;
+            }
             }
             if (retorno == 0 || retorno == 1)
             {
@@ -537,60 +544,73 @@ namespace analizador_gramaticaunidad1
             if (resultado != null)
             {
 
-                if (norepetir(entrada2.Text) == false)
-                {
-                    consola.Text = Program.excepcion;
-                }
-                else
-                {
-                    foreach (var linea in entrada2.Lines)
-                    {
-                        if (linea.Contains("startfor"))
-                        {
-                            ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
-                            relizarcondicional = relizarcondicional.Extract("startfor", "}endfor");
-                            extraer_variables_delFor(relizarcondicional.ToString());
-                            break;
-                        }
-                        else
-                        {
-                            if (linea.Contains("startif"))
-                            {
-                                ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
-                                relizarcondicional = relizarcondicional.Extract("startif", "}endif");
-                                extraervaloesif(relizarcondicional.ToString());
-                                break;
-                            }
+                vnombre.Clear();
+                vvalor.Clear();
+                vtipo.Clear();
+                ktf.Kuto codigo = new ktf.Kuto(entrada2.Text);
+                codigo = codigo.Extract("public static void main(String []args){", "}endmain");
+                MessageBox.Show(codigo.ToString());
+                analizarcodigo(codigo.ToString());
 
-                        }
-                        if (linea.Contains("ReadConsole"))
-                        {
-                            ktf.Kuto linea2 = new ktf.Kuto(linea);
-                            String variable = linea2.Extract("", "=").ToString().Replace(" ", "");
-                            String lol = Microsoft.VisualBasic.Interaction.InputBox("INGRESE VALOR DE "+variable, "ENTRADA", "LOL");
+                  
 
-                            
-                            remplazar_variable_valor(variable, lol);
-                           
-                        }
-                            if (linea.Contains("+")&&!linea.Contains("startfor"))
-                        {
-                             preparar_operacion(linea);
-                        }
-                        if (linea.Contains("print("))
-                        {
-                            imprimir(linea);
-                        }
-                      
-                        }
-                    
-                }
+                
             }
             else
             {
                 consola.Text = Program.excepcion;
             }
 
+        }
+        public void analizarcodigo(String lineas)
+        {
+            var codigo = lineas.Split('\n');
+            foreach (var linea in codigo)
+            {
+                if (linea.Contains(":"))
+                {
+                    norepetir(linea);
+                }
+                
+                MessageBox.Show(linea);
+                if (linea.Contains("startfor"))
+                {
+                    ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
+                    relizarcondicional = relizarcondicional.Extract("startfor", "}endfor");
+                    extraer_variables_delFor(relizarcondicional.ToString());
+                    break;
+                }
+                else
+                {
+                    if (linea.Contains("startif"))
+                    {
+                        ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
+                        relizarcondicional = relizarcondicional.Extract("startif", "}endif");
+                        extraervaloesif(relizarcondicional.ToString());
+                        break;
+                    }
+
+                }
+                if (linea.Contains("ReadConsole"))
+                {
+                    ktf.Kuto linea2 = new ktf.Kuto(linea);
+                    String variable = linea2.Extract("", "=").ToString().Replace(" ", "");
+                    String lol = Microsoft.VisualBasic.Interaction.InputBox("INGRESE VALOR DE " + variable, "ENTRADA", "LOL");
+
+
+                    remplazar_variable_valor(variable, lol);
+
+                }
+                if (linea.Contains("+") && !linea.Contains("startfor"))
+                {
+                    preparar_operacion(linea);
+                }
+                if (linea.Contains("print("))
+                {
+                    imprimir(linea);
+                }
+
+            }
         }
         public void remplazar_variable_valor(String linea, String Valor)
         {
@@ -747,6 +767,15 @@ namespace analizador_gramaticaunidad1
 
         private void syntaxRichTextBox1_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void PictureBox9_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("dd");
+            for (int i = 0; i < vvalor.Count; i++)
+            {
+                MessageBox.Show(vtipo.ElementAt(i) + " - " + vnombre.ElementAt(i) + " - " + vvalor.ElementAt(i));
+            }
         }
     }
 }
