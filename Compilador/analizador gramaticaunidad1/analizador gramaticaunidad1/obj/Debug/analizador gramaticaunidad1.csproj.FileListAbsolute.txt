@@ -178,3 +178,17 @@ C:\Users\TEC\Source\Repos\Compilador3\Compilador\analizador gramaticaunidad1\ana
 C:\Users\TEC\Source\Repos\Compilador3\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.csproj.CopyComplete
 C:\Users\TEC\Source\Repos\Compilador3\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.exe
 C:\Users\TEC\Source\Repos\Compilador3\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.pdb
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\bin\Debug\analizador gramaticaunidad1.exe.config
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\bin\Debug\analizador gramaticaunidad1.exe
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\bin\Debug\analizador gramaticaunidad1.pdb
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\bin\Debug\SyntaxHighlighter.pdb
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.csprojAssemblyReference.cache
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\Interop.WINGRAPHVIZLib.dll
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.csproj.ResolveComReference.cache
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador_gramaticaunidad1.PERAcode.resources
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador_gramaticaunidad1.Properties.Resources.resources
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.csproj.GenerateResource.cache
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.csproj.CoreCompileInputs.cache
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.csproj.CopyComplete
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.exe
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.pdb

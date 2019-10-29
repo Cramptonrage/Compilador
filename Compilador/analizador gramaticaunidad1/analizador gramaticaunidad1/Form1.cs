@@ -359,26 +359,22 @@ namespace analizador_gramaticaunidad1
             int retorno = 0;
 
             String[] separar;
-            MessageBox.Show(entrada);
             ktf.Kuto scrapper = new ktf.Kuto(entrada);
          //   scrapper = scrapper.Extract("public static void main(String []args){", "}");
 
             separar = scrapper.ToString().Split(';');
             int tamanolista = 0;
 
-            for (int i = 0; i < separar.Length; i++)
-            {
-                MessageBox.Show("lol "+separar[i]);
-            }
+            
             for (int i = 0; i < separar.Length; i++)
             {
                 if (!separar[i].Replace(" ","").Equals("")) { 
-                MessageBox.Show(separar[i]);
+               // MessageBox.Show(separar[i]);
                 ktf.Kuto scrapper2 = new ktf.Kuto(separar[i]);
                 String tipo = scrapper2.Extract(":", " ").ToString();
-                MessageBox.Show(tipo);
+              //  MessageBox.Show(tipo);
                 String nombre = scrapper2.Extract(tipo, "=").ToString();
-                MessageBox.Show(nombre);
+               // MessageBox.Show(nombre);
                 String valor = scrapper2.Extract("=", "").ToString();
                 tipo = tipo.Replace(" ", "");
                 nombre = nombre.Replace(" ", "");
@@ -408,7 +404,7 @@ namespace analizador_gramaticaunidad1
                 }
                 for (int j = 0; j < vnombre.Count; j++)
                 {
-                        MessageBox.Show(vnombre.ElementAt(j) + " -" + nombre);
+                       // MessageBox.Show(vnombre.ElementAt(j) + " -" + nombre);
                     if (vnombre.ElementAt(j).Equals(nombre) && tipo != "")
                     {
                         consola.Text="NO SE PUEDE DECLARAR LA MISMA VARIABLE";
