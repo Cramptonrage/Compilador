@@ -188,17 +188,17 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
 
            
             //MENSAJE.ErrorRule = SyntaxError + ToTerm(";");
-            IF.Rule = ToTerm("startif") + ToTerm("(") + id + TIPOOPERACIONIF + id + ToTerm(")") + ToTerm("{") + IMPRIMIRMENSAJE + ToTerm("}endif")
-                | ToTerm("startif") + ToTerm("(") + id + TIPOOPERACIONIF + id + ToTerm(")") + ToTerm("{") + IMPRIMIRMENSAJE + ToTerm("}")
-                + ToTerm("else") + ToTerm("{") + IMPRIMIRMENSAJE + ToTerm("}endif");
+            IF.Rule = ToTerm("startif") + ToTerm("(") + id + TIPOOPERACIONIF + id + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}endif")
+                | ToTerm("startif") + ToTerm("(") + id + TIPOOPERACIONIF + id + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}")
+                + ToTerm("else") + ToTerm("{") + DECLARACION + ToTerm("}endif");
 
 
             FOR.Rule = ToTerm("startfor") + ToTerm("(") + ToTerm("int") + ToTerm("i") + ToTerm("=") + numeroentero + ToTerm(";")
                 + ToTerm("i") + ToTerm("<") + numeroentero + ToTerm(";")
-                + ToTerm("i++") + ToTerm(")") + ToTerm("{") + IMPRIMIRMENSAJEFOR + ToTerm("}endfor")
+                + ToTerm("i++") + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}endfor")
                 | ToTerm("startfor") + ToTerm("(") + ToTerm("int") + ToTerm("i") + ToTerm("=") + numeroentero + ToTerm(";")
                 + ToTerm("i") + ToTerm(">") + numeroentero + ToTerm(";")
-                + ToTerm("i--") + ToTerm(")") + ToTerm("{") + IMPRIMIRMENSAJEFOR + ToTerm("}endfor");
+                + ToTerm("i--") + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}endfor");
 
 
             DECLARACION.Rule = ToTerm("String") + id + ToTerm("=") + STRING + ToTerm(";")

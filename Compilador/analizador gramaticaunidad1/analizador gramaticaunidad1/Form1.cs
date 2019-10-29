@@ -225,7 +225,7 @@ namespace analizador_gramaticaunidad1
         }
         public void imprimir(String entrada)
         {
-            
+          //  MessageBox.Show("imprimir");
             ktf.Kuto codigo = new ktf.Kuto(entrada);
             foreach (var temp in codigo.Extract("print(", "").ToString())
             {
@@ -236,6 +236,7 @@ namespace analizador_gramaticaunidad1
                 {
                     //imprimir valores de tipo cadena-------------------------------------
                     //MessageBox.Show(codigo.Extract("\"", "\"").ToString());
+                  //  MessageBox.Show("ss");
                     consola.Text += codigo.Extract("\"", "\"").ToString() + " ";
                 }
                 else
@@ -263,42 +264,56 @@ namespace analizador_gramaticaunidad1
         public void extraervaloesif(String entrada)
         {
             String v1 = "", v2 = "", comp = "";
-            ktf.Kuto condicional = new ktf.Kuto(entrada);
-            if (condicional.ToString().Contains(">"))
+            ktf.Kuto valoresif = new ktf.Kuto(entrada);
+            ktf.Kuto valoresif2 = new ktf.Kuto(entrada);
+            valoresif2 = valoresif2.Extract("(", ")");
+            if (valoresif2.ToString().Contains(">"))
             {
-                v1 = condicional.Extract("(", ">").ToString();
-                v2 = condicional.Extract(">", ")").ToString();
+                v1 = valoresif2.Extract("", ">").ToString();
+                v2 = valoresif2.Extract(">", "").ToString();
                 comp = ">";
             }
-            if (condicional.ToString().Contains("<"))
+            if (valoresif2.ToString().Contains("<"))
             {
-                v1 = condicional.Extract("(", "<").ToString();
-                v2 = condicional.Extract("<", ")").ToString();
+                v1 = valoresif2.Extract("", "<").ToString();
+                v2 = valoresif2.Extract("<", "").ToString();
                 comp = "<";
             }
-            if (condicional.ToString().Contains("=="))
+            if (valoresif2.ToString().Contains("=="))
             {
-                v1 = condicional.Extract("(", "==").ToString();
-                v2 = condicional.Extract("==", ")").ToString();
+                v1 = valoresif2.Extract("", "==").ToString();
+                v2 = valoresif2.Extract("==", "").ToString();
                 comp = "==";
             }
-
-            String valor1 = condicional.Extract("print(\"", "\")").ToString();
-            condicional = condicional.Extract("print(", "");
-            String valor2 = condicional.Extract("print(\"", "\")").ToString();
+            String valor1="", valor2="";
+            if (valoresif.ToString().Contains("else")){
+                 valor1 = valoresif.Extract("{", "else").ToString();
+                //  valoresif = valoresif.Extract("print(", "");
+                 valor2 = valoresif.Extract("else", "").ToString();
+            }
+            else
+            {
+                valor1 = valoresif.Extract("{", "").ToString();
+                //  valoresif = valoresif.Extract("print(", "");
+               // valor2 = valoresif.Extract("{", "endif").ToString();
+            }
+     
+          //  MessageBox.Show("valor"+valor1);
             // MessageBox.Show(condicionalif(v1, v2, comp, valor1, valor2));
-            consola.Text += condicionalif(v1, v2, comp, valor1, valor2)+" ";
+        //   MessageBox.Show("-----"+v1+ " "+v2+" "+ comp+" -"+"  " +valor1+"  "+ valor2);
+             condicionalif(v1, v2, comp, valor1, valor2);
         }
         //-----------------------------------en este metodo se realizan las condicionales if
 
-        public String condicionalif(String v1, String v2, String comp, String salida1, String salida2)
+        public void condicionalif(String v1, String v2, String comp, String salida1, String salida2)
         {
-            String salida = "";
+          //  String salida = "";
             v1 = v1.Replace(" ", "");
             v2 = v2.Replace(" ", "");
             double intv1 = 0;
             double intv2 = 0;
             int encontrarvariables = 0;
+           MessageBox.Show("iffkjklj   "+salida1);
             for (int i = 0; i < vnombre.Count; i++)
             {
                 if (vnombre.ElementAt(i).Equals(v1) && !vvalor.ElementAt(i).Equals(""))
@@ -322,36 +337,40 @@ namespace analizador_gramaticaunidad1
             {
                 if (intv1 > intv2)
                 {
-                    salida = salida1;
+                    analizarcodigo(salida1);
+                    
                 }
                 else
                 {
-                    salida = salida2;
+                    analizarcodigo(salida2);
+                    //salida = salida2;
                 }
             }
             if (comp.Equals("<"))
             {
                 if (intv1 < intv2)
                 {
-                    salida = salida1;
+                    analizarcodigo(salida1);
                 }
                 else
                 {
-                    salida = salida2;
+                    analizarcodigo(salida2);
+                    //salida = salida2;
                 }
             }
             if (comp.Equals("=="))
             {
                 if (intv1 == intv2)
                 {
-                    salida = salida1;
+                    analizarcodigo(salida1);
                 }
                 else
                 {
-                    salida = salida2;
+                    analizarcodigo(salida2);
+                    //salida = salida2;
                 }
             }
-            return salida;
+        
         }
 
         public bool norepetir(String entrada)
@@ -495,7 +514,7 @@ namespace analizador_gramaticaunidad1
             /*String entrada = "public class{" +
                 "startfor(int i = 0; i > 5 ; i++){ print(\"hola\") }endfor" +
                 "}";*/
-
+           // MessageBox.Show("dentro del for");
             ktf.Kuto elfor = new ktf.Kuto(entrada);
             String limite;
             if (entrada.Contains("<"))
@@ -507,12 +526,14 @@ namespace analizador_gramaticaunidad1
             }
             String tamano = elfor.Extract("=", ";").ToString().Replace(" ", "");
             String incremento = elfor.Extract(";", ")").ToString().Replace(" ", "");
-            operacionesfor(limite, tamano,incremento, elfor.ToString());
+          //  MessageBox.Show("dentrofor " + elfor.ToString());
+            operacionesfor(limite, tamano,incremento, elfor.Extract("{","").ToString());
 
         }
         //en ete metodo se realiza el for------------------------------------------------------
         public void operacionesfor(String limite, String tamano, String incremento, String dentrofor)
         {
+          
             int limitefor = Convert.ToInt32(limite);
             int tamanofor = Convert.ToInt32(tamano);
             String valorremplazar = "(\" i \")";
@@ -524,20 +545,23 @@ namespace analizador_gramaticaunidad1
             {
                 for (int i = tamanofor; i < limitefor; i++)
                 {
-
-                    dentrofor = dentrofor.Replace(valorremplazar, "(\" " + Convert.ToString(i) + " \")");
+                   
+                    analizarcodigo(dentrofor);
+                   /* dentrofor = dentrofor.Replace(valorremplazar, "(\" " + Convert.ToString(i) + " \")");
                     valorremplazar = "(\" " + Convert.ToString(i) + " \")";
-                    imprimir(dentrofor);
+                    imprimir(dentrofor);*/
                 }
             }
             else
             {
                 for (int i = tamanofor; i > limitefor; i--)
                 {
-
+             //       MessageBox.Show("ss");
+                    analizarcodigo(dentrofor);
+                    /*
                     dentrofor = dentrofor.Replace(valorremplazar, "(\" " + Convert.ToString(i) + " \")");
                     valorremplazar = "(\" " + Convert.ToString(i) + " \")";
-                    imprimir(dentrofor);
+                    imprimir(dentrofor);*/
                 }
             }
 
@@ -554,7 +578,7 @@ namespace analizador_gramaticaunidad1
                 vtipo.Clear();
                 ktf.Kuto codigo = new ktf.Kuto(entrada2.Text);
                 codigo = codigo.Extract("public static void main(String []args){", "}endmain");
-                MessageBox.Show(codigo.ToString());
+              // MessageBox.Show(codigo.ToString());
                 analizarcodigo(codigo.ToString());
 
                   
@@ -563,6 +587,7 @@ namespace analizador_gramaticaunidad1
             }
             else
             {
+              
                 consola.Text = Program.excepcion;
             }
 
@@ -570,8 +595,12 @@ namespace analizador_gramaticaunidad1
         public void analizarcodigo(String lineas)
         {
             var codigo = lineas.Split('\n');
+            String acumulador = "";
+            int acumuladordelineas = 0;
+            //MessageBox.Show(lineas);
             foreach (var linea in codigo)
             {
+               // MessageBox.Show(linea);
                 if (linea.Contains(";")&&!linea.Contains("startfor")&&!linea.Contains("print"))
                 {
                     if (norepetir(linea)==false)
@@ -580,45 +609,80 @@ namespace analizador_gramaticaunidad1
                     }
                     
                 }
-                
-                MessageBox.Show(linea);
-                if (linea.Contains("startfor"))
+               if (linea.Contains("startif")&&acumuladordelineas ==0|| acumuladordelineas == 1) {
+                    acumuladordelineas = 1;
+                    acumulador += linea;
+                }
+                if (linea.Contains("endif")&&acumuladordelineas == 1)
                 {
-                    ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
-                    relizarcondicional = relizarcondicional.Extract("startfor", "}endfor");
+                    acumuladordelineas = 0;
+                    acumulador += linea;
+                   
+                    ktf.Kuto relizarcondicional = new ktf.Kuto(acumulador);
+                    relizarcondicional = relizarcondicional.Extract("startif", "endif");
+                    // MessageBox.Show(relizarcondicional.ToString());
+                    acumulador = "";
+                    extraervaloesif(relizarcondicional.ToString());
+                    
+                    
+                }
+                if (linea.Contains("startfor") && acumuladordelineas == 0 || acumuladordelineas == 2)
+                {
+                    acumuladordelineas = 2;
+                    acumulador += linea;
+                }
+                if (linea.Contains("endfor")&& acumuladordelineas==2)
+                {
+                    acumuladordelineas = 0;
+                    acumulador += linea;
+
+                    ktf.Kuto relizarcondicional = new ktf.Kuto(acumulador);
+                    relizarcondicional = relizarcondicional.Extract("startfor", "endfor");
+                    acumulador = "";
                     extraer_variables_delFor(relizarcondicional.ToString());
-                    break;
-                }
-                else
-                {
-                    if (linea.Contains("startif"))
-                    {
-                        ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
-                        relizarcondicional = relizarcondicional.Extract("startif", "}endif");
-                        extraervaloesif(relizarcondicional.ToString());
-                        break;
-                    }
+                   
 
                 }
-                if (linea.Contains("ReadConsole"))
-                {
-                    ktf.Kuto linea2 = new ktf.Kuto(linea);
-                    String variable = linea2.Extract("", "=").ToString().Replace(" ", "");
-                    String lol = Microsoft.VisualBasic.Interaction.InputBox("INGRESE VALOR DE " + variable, "ENTRADA", "LOL");
+
+                /* if (linea.Contains("startfor"))
+                 {
+                     ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
+                     relizarcondicional = relizarcondicional.Extract("startfor", "}endfor");
+                     extraer_variables_delFor(relizarcondicional.ToString());
+                     break;
+                 }
+                 else
+                 {
+                     if (linea.Contains("higigh"))
+                     {
+                         ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
+                         relizarcondicional = relizarcondicional.Extract("startif", "}endif");
+                         extraervaloesif(relizarcondicional.ToString());
+                         break;
+                     }
+
+                 }*/
+                 if (linea.Contains("ReadConsole") && acumuladordelineas == 0)
+                 {
+                     ktf.Kuto linea2 = new ktf.Kuto(linea);
+                     String variable = linea2.Extract("", "=").ToString().Replace(" ", "");
+                     String lol = Microsoft.VisualBasic.Interaction.InputBox("INGRESE VALOR DE " + variable, "ENTRADA", "LOL");
 
 
-                    remplazar_variable_valor(variable, lol);
+                     remplazar_variable_valor(variable, lol);
 
-                }
+                 }
                 if (linea.Contains("+") && !linea.Contains("startfor"))
                 {
                     preparar_operacion(linea);
                 }
-                if (linea.Contains("print("))
+                MessageBox.Show("----"+linea);
+                if (linea.Contains("print")&& acumuladordelineas == 0)
                 {
+                    MessageBox.Show("imprimir "+acumuladordelineas);
                     imprimir(linea);
                 }
-
+                
             }
         }
         public void remplazar_variable_valor(String linea, String Valor)
