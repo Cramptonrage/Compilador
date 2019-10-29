@@ -71,8 +71,8 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
             var reservadaimplements = "implements";
             var reservadaimport = "import";
             var reservadainstanceof = "instanceof";
-            var reservadaint = ":int";
-            var reservadalong = ":long";
+            var reservadaint = "int";
+            var reservadalong = "long";
             var reservadanative = "native";
             var reservadanew = "new";
             var reservadastring = "string";
@@ -201,18 +201,18 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
                 + ToTerm("i--") + ToTerm(")") + ToTerm("{") + IMPRIMIRMENSAJEFOR + ToTerm("}endfor");
 
 
-            DECLARACION.Rule = ToTerm(":String") + id + ToTerm("=") + STRING + ToTerm(";")
+            DECLARACION.Rule = ToTerm("String") + id + ToTerm("=") + STRING + ToTerm(";")
             | reservadaint + id + reservadaigual + numeroentero + reservadapuntoycoma + DECLARACION
             | reservadadouble + id + reservadaigual + numerodecimal + reservadapuntoycoma + DECLARACION
             | reservadadouble + id + reservadaigual + numeroentero + reservadapuntoycoma + DECLARACION
             | reservadaboolean + id + reservadaigual + ToTerm("true") + reservadapuntoycoma + DECLARACION
             | reservadaboolean + id + reservadaigual + ToTerm("false") + reservadapuntoycoma + DECLARACION
-            | ToTerm(":") + id + ToTerm("=") + numeroentero + ToTerm(";") + DECLARACION
-            | ToTerm(":") + id + ToTerm("=") + numerodecimal + ToTerm(";") + DECLARACION
-            | ToTerm(":") + id + ToTerm("=") + ToTerm("true") + ToTerm(";") + DECLARACION
-            | ToTerm(":") + id + ToTerm("=") + ToTerm("false") + ToTerm(";") + DECLARACION
-            | ToTerm(":") + id + ToTerm("=") + STRING + ToTerm(";") + DECLARACION
-            | ToTerm(":") + id + ToTerm("=") + id + ToTerm(";") + DECLARACION
+            | id + ToTerm("=") + numeroentero + ToTerm(";") + DECLARACION
+            | id + ToTerm("=") + numerodecimal + ToTerm(";") + DECLARACION
+            | id + ToTerm("=") + ToTerm("true") + ToTerm(";") + DECLARACION
+            | id + ToTerm("=") + ToTerm("false") + ToTerm(";") + DECLARACION
+            | id + ToTerm("=") + STRING + ToTerm(";") + DECLARACION
+            | id + ToTerm("=") + id + ToTerm(";") + DECLARACION
             | reservadaint + id + ToTerm(";") + DECLARACION
             | reservadadouble + id + ToTerm(";") + DECLARACION
             | reservadaboolean + id + ToTerm(";") + DECLARACION

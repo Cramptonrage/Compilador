@@ -363,15 +363,16 @@ namespace analizador_gramaticaunidad1
          //   scrapper = scrapper.Extract("public static void main(String []args){", "}");
 
             separar = scrapper.ToString().Split(';');
-            int tamanolista = 0;
+           
 
             
             for (int i = 0; i < separar.Length; i++)
             {
-                if (!separar[i].Replace(" ","").Equals("")) { 
+                if (!separar[i].Replace(" ","").Equals("")) {
+                    bool norepetir = true;
                // MessageBox.Show(separar[i]);
                 ktf.Kuto scrapper2 = new ktf.Kuto(separar[i]);
-                String tipo = scrapper2.Extract(":", " ").ToString();
+                String tipo = scrapper2.Extract("", " ").ToString();
               //  MessageBox.Show(tipo);
                 String nombre = scrapper2.Extract(tipo, "=").ToString();
                // MessageBox.Show(nombre);
@@ -412,6 +413,8 @@ namespace analizador_gramaticaunidad1
                     }
                     if (tipo.Equals("") && nombre.Equals(vnombre.ElementAt(j)))
                     {
+                            
+                            
                         retorno = 1;
                         try
                         {
@@ -426,11 +429,14 @@ namespace analizador_gramaticaunidad1
                             }
                             if (vtipo.ElementAt(j).Equals("boolean"))
                             {
-                                Program.excepcion = "ERROR DE TIPO DE DATO";
+                               // Program.excepcion = "ERROR DE TIPO DE DATO";
                                 Convert.ToBoolean(valor);
                             }
+                                vvalor[j] = valor;
+                                norepetir = false;
 
-                        } catch (Exception e) {
+                            } catch (Exception e) {
+                                consola.Text = "ERROR DE TIPO DE DATO";
                             return false;
                         }
 
@@ -442,10 +448,12 @@ namespace analizador_gramaticaunidad1
                         {
                             retorno = 3;
                         } } }
-                vtipo.Add(tipo);
-                vnombre.Add(nombre);
-                vvalor.Add(valor);
-                tamanolista++;
+                    if (norepetir==true) {
+                        vtipo.Add(tipo);
+                        vnombre.Add(nombre);
+                        vvalor.Add(valor);
+                       
+                    }
             }
             }
             if (retorno == 0 || retorno == 1)
@@ -564,9 +572,13 @@ namespace analizador_gramaticaunidad1
             var codigo = lineas.Split('\n');
             foreach (var linea in codigo)
             {
-                if (linea.Contains(":"))
+                if (linea.Contains(";")&&!linea.Contains("startfor")&&!linea.Contains("print"))
                 {
-                    norepetir(linea);
+                    if (norepetir(linea)==false)
+                    {
+                        break;
+                    }
+                    
                 }
                 
                 MessageBox.Show(linea);
