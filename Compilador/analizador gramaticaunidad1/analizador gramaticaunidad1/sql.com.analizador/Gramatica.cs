@@ -201,7 +201,7 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
                 + ToTerm("i--") + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}endfor");
 
 
-            DECLARACION.Rule = ToTerm("String") + id + ToTerm("=") + STRING + ToTerm(";")
+            DECLARACION.Rule = ToTerm("String") + id + ToTerm("=") + ToTerm("\"")+ id  +ToTerm("\"") + ToTerm(";")
             | reservadaint + id + reservadaigual + numeroentero + reservadapuntoycoma + DECLARACION
             | reservadadouble + id + reservadaigual + numerodecimal + reservadapuntoycoma + DECLARACION
             | reservadadouble + id + reservadaigual + numeroentero + reservadapuntoycoma + DECLARACION
@@ -216,11 +216,11 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
             | reservadaint + id + ToTerm(";") + DECLARACION
             | reservadadouble + id + ToTerm(";") + DECLARACION
             | reservadaboolean + id + ToTerm(";") + DECLARACION
-            | ToTerm(":String") + id + ToTerm(";") + DECLARACION
+            | ToTerm("String") + id + ToTerm(";") + DECLARACION
             | reservadaint + id + reservadaigual + id + OPERACIONES + ToTerm(";") + DECLARACION
             | ToTerm("print") + ToTerm("(") + id + ToTerm(")") + reservadapuntoycoma + DECLARACION
             | ToTerm("print") + ToTerm("(") + ToTerm("\"") + id + ToTerm("\"") + ToTerm(")") + reservadapuntoycoma + DECLARACION
-            | id + reservadaigual + ToTerm("ReadConsole()") + ToTerm(";") + DECLARACION
+            | id + reservadaigual + ToTerm("ReadLine") + ToTerm(";") + DECLARACION
             | IF + DECLARACION
             | FOR + DECLARACION
             | Empty;

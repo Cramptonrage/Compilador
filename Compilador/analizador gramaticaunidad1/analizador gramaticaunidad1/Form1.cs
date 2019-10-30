@@ -597,11 +597,13 @@ namespace analizador_gramaticaunidad1
             var codigo = lineas.Split('\n');
             String acumulador = "";
             int acumuladordelineas = 0;
+            int cantidaddeif = 0;
             //MessageBox.Show(lineas);
             foreach (var linea in codigo)
             {
+                MessageBox.Show(linea);
                // MessageBox.Show(linea);
-                if (linea.Contains(";")&&!linea.Contains("startfor")&&!linea.Contains("print"))
+                if (linea.Contains(";")&&!linea.Contains("startfor")&&!linea.Contains("print")&& !linea.Contains("ReadLine"))
                 {
                     if (norepetir(linea)==false)
                     {
@@ -611,12 +613,12 @@ namespace analizador_gramaticaunidad1
                 }
                if (linea.Contains("startif")&&acumuladordelineas ==0|| acumuladordelineas == 1) {
                     acumuladordelineas = 1;
-                    acumulador += linea;
+                    acumulador += linea + "\n";
                 }
-                if (linea.Contains("endif")&&acumuladordelineas == 1)
+                if (linea.Contains("endif")&&acumuladordelineas == 1&& cantidaddeif==0)
                 {
                     acumuladordelineas = 0;
-                    acumulador += linea;
+                    acumulador += linea + "\n";
                    
                     ktf.Kuto relizarcondicional = new ktf.Kuto(acumulador);
                     relizarcondicional = relizarcondicional.Extract("startif", "endif");
@@ -629,12 +631,12 @@ namespace analizador_gramaticaunidad1
                 if (linea.Contains("startfor") && acumuladordelineas == 0 || acumuladordelineas == 2)
                 {
                     acumuladordelineas = 2;
-                    acumulador += linea;
+                    acumulador += linea+"\n";
                 }
                 if (linea.Contains("endfor")&& acumuladordelineas==2)
                 {
                     acumuladordelineas = 0;
-                    acumulador += linea;
+                    acumulador += linea + "\n";
 
                     ktf.Kuto relizarcondicional = new ktf.Kuto(acumulador);
                     relizarcondicional = relizarcondicional.Extract("startfor", "endfor");
@@ -662,7 +664,7 @@ namespace analizador_gramaticaunidad1
                      }
 
                  }*/
-                 if (linea.Contains("ReadConsole") && acumuladordelineas == 0)
+                 if (linea.Contains("ReadLine") && acumuladordelineas == 0)
                  {
                      ktf.Kuto linea2 = new ktf.Kuto(linea);
                      String variable = linea2.Extract("", "=").ToString().Replace(" ", "");
@@ -676,10 +678,10 @@ namespace analizador_gramaticaunidad1
                 {
                     preparar_operacion(linea);
                 }
-                MessageBox.Show("----"+linea);
-                if (linea.Contains("print")&& acumuladordelineas == 0)
+               // MessageBox.Show("----"+linea);
+                if (linea.Contains("print")&& acumuladordelineas == 0 && !linea.Contains("startfor"))
                 {
-                    MessageBox.Show("imprimir "+acumuladordelineas);
+                    //MessageBox.Show("imprimir "+acumuladordelineas);
                     imprimir(linea);
                 }
                 
