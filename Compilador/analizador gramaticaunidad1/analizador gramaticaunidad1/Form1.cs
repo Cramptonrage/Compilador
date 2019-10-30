@@ -174,10 +174,10 @@ namespace analizador_gramaticaunidad1
         public bool crearoperaciones() {
 
             bool salidaboleana = true;
-            for (int i = 0; i < vvalor.Count; i++)
+           /* for (int i = 0; i < vvalor.Count; i++)
             {
                 MessageBox.Show(vvalor.ElementAt(i));
-            }
+            }*/
             for (int i = 0; i < vtipo.Count; i++)
             {
 
@@ -313,7 +313,7 @@ namespace analizador_gramaticaunidad1
             double intv1 = 0;
             double intv2 = 0;
             int encontrarvariables = 0;
-           MessageBox.Show("iffkjklj   "+salida1);
+          // MessageBox.Show("iffkjklj   "+salida1);
             for (int i = 0; i < vnombre.Count; i++)
             {
                 if (vnombre.ElementAt(i).Equals(v1) && !vvalor.ElementAt(i).Equals(""))
@@ -597,11 +597,11 @@ namespace analizador_gramaticaunidad1
             var codigo = lineas.Split('\n');
             String acumulador = "";
             int acumuladordelineas = 0;
-            int cantidaddeif = 0;
+           
             //MessageBox.Show(lineas);
             foreach (var linea in codigo)
             {
-                MessageBox.Show(linea);
+               // MessageBox.Show(linea);
                // MessageBox.Show(linea);
                 if (linea.Contains(";")&&!linea.Contains("startfor")&&!linea.Contains("print")&& !linea.Contains("ReadLine"))
                 {
@@ -615,7 +615,7 @@ namespace analizador_gramaticaunidad1
                     acumuladordelineas = 1;
                     acumulador += linea + "\n";
                 }
-                if (linea.Contains("endif")&&acumuladordelineas == 1&& cantidaddeif==0)
+                if (linea.Contains("endif")&&acumuladordelineas == 1)
                 {
                     acumuladordelineas = 0;
                     acumulador += linea + "\n";

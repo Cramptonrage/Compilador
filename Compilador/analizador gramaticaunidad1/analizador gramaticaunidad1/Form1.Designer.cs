@@ -222,7 +222,7 @@
             this.panel1.Controls.Add(this.lvToken);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 381);
+            this.panel1.Location = new System.Drawing.Point(0, 549);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1120, 161);
             this.panel1.TabIndex = 3;
@@ -357,7 +357,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 92);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1120, 289);
+            this.panel2.Size = new System.Drawing.Size(1120, 457);
             this.panel2.TabIndex = 5;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint_1);
             // 
@@ -366,7 +366,7 @@
             this.entrada2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.entrada2.Location = new System.Drawing.Point(31, 1);
             this.entrada2.Name = "entrada2";
-            this.entrada2.Size = new System.Drawing.Size(1089, 287);
+            this.entrada2.Size = new System.Drawing.Size(1089, 454);
             this.entrada2.TabIndex = 3;
             this.entrada2.Text = "";
             this.entrada2.TextChanged += new System.EventHandler(this.entrada2_TextChanged);
@@ -389,7 +389,7 @@
             this.nlista.ItemHeight = 20;
             this.nlista.Location = new System.Drawing.Point(0, 1);
             this.nlista.Name = "nlista";
-            this.nlista.Size = new System.Drawing.Size(29, 280);
+            this.nlista.Size = new System.Drawing.Size(29, 460);
             this.nlista.TabIndex = 0;
             // 
             // timer1
@@ -406,7 +406,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1120, 542);
+            this.ClientSize = new System.Drawing.Size(1120, 710);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menucontenedor);
