@@ -689,17 +689,35 @@ namespace analizador_gramaticaunidad1
         }
         public void remplazar_variable_valor(String linea, String Valor)
         {
-            for (int i = 0; i < vvalor.Count; i++)
+            try
+            {
+                for (int i = 0; i < vvalor.Count; i++)
             {
                 if (linea.Equals(vnombre.ElementAt(i)))
                 {
                    
-                    vvalor[i] = Valor;
+                        if (vtipo.ElementAt(i).Equals("int"))
+                        {
+                            Convert.ToInt32(vvalor);
+                        }
+                        if (vtipo.ElementAt(i).Equals("Double"))
+                        {
+                            Convert.ToDouble(vvalor);
+                        }
+                        if (vtipo.ElementAt(i).Equals("Double"))
+                        {
+                            Convert.ToString(vvalor);
+                        }
+                        vvalor[i] = Valor;
                    
                 }
             }
-           
-            
+            }
+            catch (Exception e)
+            {
+
+            }
+
         }
        
         private void panel2_Paint(object sender, PaintEventArgs e)
