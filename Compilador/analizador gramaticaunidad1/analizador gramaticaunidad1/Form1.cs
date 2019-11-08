@@ -18,8 +18,7 @@ namespace analizador_gramaticaunidad1
     public partial class PERAcode : Form
     {
         RegexLexer csLexer = new RegexLexer();
-        int ventana = 300;
-        int CARACTER=0;
+        bool errorcodigo = true;
       public static   List<string> vtipo = new List<string>();
        public static List<string> vnombre = new List<string>();
        public static List<string> vvalor = new List<string>();
@@ -223,42 +222,67 @@ namespace analizador_gramaticaunidad1
             return salidaboleana;
 
         }
-        public void imprimir(String entrada)
+        public void imprimir1(String entrada)
         {
-          //  MessageBox.Show("imprimir");
-            ktf.Kuto codigo = new ktf.Kuto(entrada);
-            foreach (var temp in codigo.Extract("print(", "").ToString())
+            String[] prints = entrada.Split(';');
+            for (int i = 0; i < prints.Length; i++)
             {
-                codigo = codigo.Extract("print", "");
-                // 
-                String imprimir = codigo.Extract("(", ")").ToString();
-                if (imprimir.Contains("\""))
+                ktf.Kuto imprimir2 = new ktf.Kuto(prints[i]);
+                imprimir2 = imprimir2.Extract("print", "");
+                imprimir2 = imprimir2.Extract("(",")");
+
+                if (imprimir2.ToString().Contains("+"))
                 {
-                    //imprimir valores de tipo cadena-------------------------------------
-                    //MessageBox.Show(codigo.Extract("\"", "\"").ToString());
-                  //  MessageBox.Show("ss");
-                    consola.Text += codigo.Extract("\"", "\"").ToString() + " ";
+                    String[] prints2 = imprimir2.ToString().Split('+');
+                    for (int j = 0; j < prints2.Length; j++)
+                    {
+                        imprimir(prints2[j]);
+                    }
                 }
                 else
                 {
-                    //imprimir operaciones -----------------------------------------------
+                    
+                    imprimir(imprimir2.ToString());
+                }
+            }
 
-                    String valoraimprimir = codigo.Extract("(", ")").ToString().Replace(" ", "");
+        }
+
+        public void imprimir(String entrada)
+        {
+          //  MessageBox.Show("imprimir");
+          
+            
+               
+                if (entrada.Contains("\""))
+                {
+                //imprimir valores de tipo cadena-------------------------------------
+                //MessageBox.Show(codigo.Extract("\"", "\"").ToString());
+                //  MessageBox.Show("ss");
+                ktf.Kuto codigo = new ktf.Kuto(entrada);
+                consola.Text += codigo.Extract("\"", "\"").ToString() + " ";
+                }
+                else
+                {
+                  
                     for (int i = 0; i < vnombre.Count; i++)
                     {
-                        if (valoraimprimir.Equals(vnombre.ElementAt(i)) && !vvalor.ElementAt(i).Equals(""))
+                        if (entrada.Equals(vnombre.ElementAt(i)) && !vvalor.ElementAt(i).Equals(""))
                         {
-                            // MessageBox.Show("resultado " + "-"+vvalor.ElementAt(i)+"-");
-                            consola.Text += realizar_operacion(vvalor.ElementAt(i))+" ";
+                        // MessageBox.Show("resultado " + "-"+vvalor.ElementAt(i)+"-");
+                        if (vvalor.ElementAt(i).Contains("\""))
+                        {
+                            ktf.Kuto codigo = new ktf.Kuto(vvalor.ElementAt(i));
+                            consola.Text += codigo.Extract("\"", "\"").ToString() + " ";
+                        }
+                        else { consola.Text += realizar_operacion(vvalor.ElementAt(i).Replace(" ","")) + " "; }
+                            
                         }
                     }
 
                 }
-                if (codigo.Extract("(", ")").ToString().Equals(""))
-                {
-                    break;
-                }
-            }
+              
+            
         }
         //--------------------------------------con este metodo se extraen las condicionales if
         public void extraervaloesif(String entrada)
@@ -313,20 +337,31 @@ namespace analizador_gramaticaunidad1
             double intv1 = 0;
             double intv2 = 0;
             int encontrarvariables = 0;
-          // MessageBox.Show("iffkjklj   "+salida1);
-            for (int i = 0; i < vnombre.Count; i++)
+            try
             {
-                if (vnombre.ElementAt(i).Equals(v1) && !vvalor.ElementAt(i).Equals(""))
+                intv1 = Convert.ToDouble(v1);
+                encontrarvariables++;
+                intv2 = Convert.ToDouble(v2);
+                encontrarvariables++;
+            }
+            catch (Exception e)
+            {
+                for (int i = 0; i < vnombre.Count; i++)
                 {
-                    intv1 = Convert.ToDouble(realizar_operacion(vvalor.ElementAt(i)));
-                    encontrarvariables++;
-                }
-                if (vnombre.ElementAt(i).Equals(v2) && !vvalor.ElementAt(i).Equals(""))
-                {
-                    intv2 = Convert.ToDouble(realizar_operacion(vvalor.ElementAt(i)));
-                    encontrarvariables++;
+
+                    if (vnombre.ElementAt(i).Equals(v1) && !vvalor.ElementAt(i).Equals("")&& encontrarvariables==0)
+                    {
+                        intv1 = Convert.ToDouble(realizar_operacion(vvalor.ElementAt(i)));
+                        encontrarvariables++;
+                    }
+                    if (vnombre.ElementAt(i).Equals(v2) && !vvalor.ElementAt(i).Equals(""))
+                    {
+                        intv2 = Convert.ToDouble(realizar_operacion(vvalor.ElementAt(i)));
+                        encontrarvariables++;
+                    }
                 }
             }
+          
             if (encontrarvariables!=2)
             {
                 //entrada.ForeColor = Color.Red;
@@ -601,13 +636,20 @@ namespace analizador_gramaticaunidad1
             //MessageBox.Show(lineas);
             foreach (var linea in codigo)
             {
+                if (errorcodigo == false)
+                {
+                    break;
+                }
                // MessageBox.Show(linea);
                // MessageBox.Show(linea);
                 if (linea.Contains(";")&&!linea.Contains("startfor")&&!linea.Contains("print")&& !linea.Contains("ReadLine"))
                 {
                     if (norepetir(linea)==false)
                     {
+                        errorcodigo = false;
                         break;
+                       
+                        
                     }
                     
                 }
@@ -664,14 +706,19 @@ namespace analizador_gramaticaunidad1
                      }
 
                  }*/
-                 if (linea.Contains("ReadLine") && acumuladordelineas == 0)
+                 if (linea.Contains("ReadLine") && acumuladordelineas == 0|| linea.Contains("readline") && acumuladordelineas == 0)
                  {
                      ktf.Kuto linea2 = new ktf.Kuto(linea);
                      String variable = linea2.Extract("", "=").ToString().Replace(" ", "");
                      String lol = Microsoft.VisualBasic.Interaction.InputBox("INGRESE VALOR DE " + variable, "ENTRADA", "LOL");
 
 
-                     remplazar_variable_valor(variable, lol);
+                    if( remplazar_variable_valor(variable, lol)==false)
+                    {
+                        errorcodigo = false;
+                        consola.Text = "ERROR AL INGRESAR VARIABLE";
+                        break;
+                    }
 
                  }
                 if (linea.Contains("+") && !linea.Contains("startfor"))
@@ -682,13 +729,14 @@ namespace analizador_gramaticaunidad1
                 if (linea.Contains("print")&& acumuladordelineas == 0 && !linea.Contains("startfor"))
                 {
                     //MessageBox.Show("imprimir "+acumuladordelineas);
-                    imprimir(linea);
+                    imprimir1(linea);
                 }
                 
             }
         }
-        public void remplazar_variable_valor(String linea, String Valor)
+        public bool remplazar_variable_valor(String linea, String Valor)
         {
+            bool salida = true;
             try
             {
                 for (int i = 0; i < vvalor.Count; i++)
@@ -698,15 +746,15 @@ namespace analizador_gramaticaunidad1
                    
                         if (vtipo.ElementAt(i).Equals("int"))
                         {
-                            Convert.ToInt32(vvalor);
+                            Convert.ToInt32(Valor);
                         }
                         if (vtipo.ElementAt(i).Equals("Double"))
                         {
-                            Convert.ToDouble(vvalor);
+                            Convert.ToDouble(Valor);
                         }
                         if (vtipo.ElementAt(i).Equals("Double"))
                         {
-                            Convert.ToString(vvalor);
+                            Convert.ToString(Valor);
                         }
                         vvalor[i] = Valor;
                    
@@ -715,8 +763,9 @@ namespace analizador_gramaticaunidad1
             }
             catch (Exception e)
             {
-
+                salida = false;
             }
+            return salida;
 
         }
        

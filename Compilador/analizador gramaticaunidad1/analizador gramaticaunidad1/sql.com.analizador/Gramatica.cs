@@ -122,10 +122,19 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
             NonTerminal OPERACIONES = new NonTerminal("OPERACIONES");
             NonTerminal TIPOOPERACIONIF = new NonTerminal("TIPOOPERACIONIF");
             NonTerminal SALIDAMENSAJE = new NonTerminal("OPERACIONES");
-            NonTerminal IMPRIMIRMENSAJE = new NonTerminal("IMPRIMIRMENSAJE");
-            NonTerminal IMPRIMIRMENSAJEFOR = new NonTerminal("IMPRIMIRMENSAJE");
+            NonTerminal VARIABLESIF = new NonTerminal("IMPRIMIRMENSAJE");
             SALIDAMENSAJE.Rule = id + SALIDAMENSAJE
-          | Empty;
+              | id+ToTerm("+")+id+ SALIDAMENSAJE
+              | ToTerm("+")+ id+SALIDAMENSAJE
+              | STRING + SALIDAMENSAJE
+              | id + ToTerm("+") + STRING + SALIDAMENSAJE
+              | ToTerm("+") + STRING + SALIDAMENSAJE
+              | Empty;
+
+            VARIABLESIF.Rule = numeroentero
+                | numerodecimal
+                | id;
+
 
             TIPOOPERACIONIF.Rule = ToTerm(">")
                 | ToTerm("<")
@@ -171,11 +180,8 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
 
             INICIO.Rule = VISIBILIDAD + reservadaclass + id + reservadallaveabrir + MAIN + reservadallavecerrar;
 
-            IMPRIMIRMENSAJE.Rule = ToTerm("print(\"") + SALIDAMENSAJE + ToTerm("\")") + ToTerm(";") + IMPRIMIRMENSAJE
-                | Empty;
-            IMPRIMIRMENSAJEFOR.Rule = ToTerm("print(\"") + SALIDAMENSAJE + ToTerm("\")") + ToTerm(";") + IMPRIMIRMENSAJEFOR
-                | ToTerm("print(") + id + ToTerm(")") + ToTerm(";") + IMPRIMIRMENSAJEFOR
-                | Empty;
+       
+           
 
             INICIO.Rule = ToTerm("import java.util.*;") + VISIBILIDAD + ToTerm("class") + id + ToTerm("{") + MAIN + ToTerm("}")
             | VISIBILIDAD + ToTerm("class") + id + ToTerm("{") + Empty + ToTerm("}");
@@ -188,8 +194,8 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
 
            
             //MENSAJE.ErrorRule = SyntaxError + ToTerm(";");
-            IF.Rule = ToTerm("startif") + ToTerm("(") + id + TIPOOPERACIONIF + id + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}endif")
-                | ToTerm("startif") + ToTerm("(") + id + TIPOOPERACIONIF + id + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}")
+            IF.Rule = ToTerm("startif") + ToTerm("(") + VARIABLESIF + TIPOOPERACIONIF + VARIABLESIF + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}endif")
+                | ToTerm("startif") + ToTerm("(") + VARIABLESIF + TIPOOPERACIONIF + VARIABLESIF + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}")
                 + ToTerm("else") + ToTerm("{") + DECLARACION + ToTerm("}endif");
 
 
@@ -201,7 +207,7 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
                 + ToTerm("i--") + ToTerm(")") + ToTerm("{") + DECLARACION + ToTerm("}endfor");
 
 
-            DECLARACION.Rule = ToTerm("String") + id + ToTerm("=") + ToTerm("\"")+ id  +ToTerm("\"") + ToTerm(";")
+            DECLARACION.Rule = ToTerm("String") + id + ToTerm("=") + STRING + ToTerm(";")+ DECLARACION
             | reservadaint + id + reservadaigual + numeroentero + reservadapuntoycoma + DECLARACION
             | reservadadouble + id + reservadaigual + numerodecimal + reservadapuntoycoma + DECLARACION
             | reservadadouble + id + reservadaigual + numeroentero + reservadapuntoycoma + DECLARACION
@@ -218,8 +224,7 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
             | reservadaboolean + id + ToTerm(";") + DECLARACION
             | ToTerm("String") + id + ToTerm(";") + DECLARACION
             | reservadaint + id + reservadaigual + id + OPERACIONES + ToTerm(";") + DECLARACION
-            | ToTerm("print") + ToTerm("(") + id + ToTerm(")") + reservadapuntoycoma + DECLARACION
-            | ToTerm("print") + ToTerm("(") + ToTerm("\"") + id + ToTerm("\"") + ToTerm(")") + reservadapuntoycoma + DECLARACION
+            | ToTerm("print") + ToTerm("(") + SALIDAMENSAJE + ToTerm(")") + reservadapuntoycoma + DECLARACION
             | id + reservadaigual + ToTerm("ReadLine") + ToTerm(";") + DECLARACION
             | IF + DECLARACION
             | FOR + DECLARACION
