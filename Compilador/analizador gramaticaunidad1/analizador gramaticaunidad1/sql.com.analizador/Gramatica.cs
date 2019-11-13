@@ -75,7 +75,7 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
             var reservadalong = "long";
             var reservadanative = "native";
             var reservadanew = "new";
-            var reservadastring = "string";
+            var reservadastring = "String";
             var reservadallaveabrir = "{";
             var reservadallavecerrar = "}";
             var reservadapuntoycoma = ";";
@@ -140,22 +140,15 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
                 | ToTerm("<")
                 | ToTerm("==");
 
-            TIPO.Rule = TIPO
-                | reservadashort
-                | reservadafloat
-                | reservadastring
-                | reservadaint
-                | reservadalong
-                | reservadachar
-                | reservadabyte
-                | reservadaboolean
-                | reservadadouble
-                | reservadashort;
+            TIPO.Rule = ToTerm("int")
+                | ToTerm("double")
+                | ToTerm("String");
 
             OPERACIONES.Rule = multiplicacion + id + OPERACIONES
                 | mas + id + OPERACIONES
                 | menos + id + OPERACIONES
                 | division + id + OPERACIONES
+                | id + OPERACIONES
                 | Empty;
             //int val=d+e-r+s;
             VISIBILIDAD.Rule = Empty
@@ -223,7 +216,7 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
             | reservadadouble + id + ToTerm(";") + DECLARACION
             | reservadaboolean + id + ToTerm(";") + DECLARACION
             | ToTerm("String") + id + ToTerm(";") + DECLARACION
-            | reservadaint + id + reservadaigual + id + OPERACIONES + ToTerm(";") + DECLARACION
+            | ToTerm("String") + id + reservadaigual + OPERACIONES + ToTerm(";") + DECLARACION
             | ToTerm("print") + ToTerm("(") + SALIDAMENSAJE + ToTerm(")") + reservadapuntoycoma + DECLARACION
             | id + reservadaigual + ToTerm("ReadLine") + ToTerm(";") + DECLARACION
             | IF + DECLARACION

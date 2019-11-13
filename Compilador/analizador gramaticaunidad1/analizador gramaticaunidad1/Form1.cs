@@ -170,58 +170,7 @@ namespace analizador_gramaticaunidad1
         private void Analizar_Click(object sender, EventArgs e)
         {
         }
-        public bool crearoperaciones() {
-
-            bool salidaboleana = true;
-           /* for (int i = 0; i < vvalor.Count; i++)
-            {
-                MessageBox.Show(vvalor.ElementAt(i));
-            }*/
-            for (int i = 0; i < vtipo.Count; i++)
-            {
-
-                if (vvalor.ElementAt(i).Contains("+") || vvalor.ElementAt(i).Contains("-") ||
-                    vvalor.ElementAt(i).Contains("*") || vvalor.ElementAt(i).Contains("/"))
-                {
-                    
-                    string operacion = vvalor.ElementAt(i);
-                    operacion = operacion.Replace(" ", "");
-                    operacion = operacion.Replace("+", "?");
-                    operacion = operacion.Replace("-", "?");
-                    operacion = operacion.Replace("*", "?");
-                    operacion = operacion.Replace("/", "?");
-
-                    String[] operacionseparada = operacion.Split('?');
-                    int contavariables = 0;
-
-                    for (int j = 0; j < operacionseparada.Count(); j++)
-                    {
-                        for (int h = 0; h < vnombre.Count; h++)
-                        {
-                            if (vnombre.ElementAt(h).Equals(operacionseparada.ElementAt(j)) && !vvalor.ElementAt(h).Equals(""))
-                            {
-                                vvalor[i] = vvalor[i].Replace(operacionseparada.ElementAt(j), vvalor[h]);
-                                contavariables++;
-                               
-                                break;
-
-                            }
-                        }
-                    }
-                    if (contavariables != operacionseparada.Count())
-                    {
-                       // MessageBox.Show("error, no  encontraron todas las variables");
-                        salidaboleana = false;
-                        Program.excepcion = "ERROR EN LA OPERACION";
-
-                    }
-
-                }
-                // tablavalores.Rows.Add(vtipo.ElementAt(i), vnombre.ElementAt(i), vvalor.ElementAt(i));
-            }
-            return salidaboleana;
-
-        }
+       
         public void imprimir1(String entrada)
         {
             String[] prints = entrada.Split(';');
@@ -279,7 +228,20 @@ namespace analizador_gramaticaunidad1
                             }
                             else {
                                 cuadruplos_intermedio cuadriplos = new cuadruplos_intermedio();
-                                consola.Text += cuadriplos.realizar_operacion(vnombre, vvalor, vvalor.ElementAt(i).Replace(" ", "")) + " ";
+                                concatenacion concatenar = new concatenacion();
+
+                                if (vtipo.ElementAt(i).Equals("String")&&vvalor.ElementAt(i).Contains("+")) {
+                                    consola.Text =concatenar.concatenar(vtipo, vnombre, vvalor, vvalor.ElementAt(i)) + " ";
+                                }
+                                if (vtipo.ElementAt(i).Equals("Double"))
+                                {
+                                    consola.Text += cuadriplos.realizar_operacion(vnombre, vvalor, vvalor.ElementAt(i).Replace(" ", "")) + " ";
+                                }
+                                if (vtipo.ElementAt(i).Equals("int"))
+                                {
+                                    consola.Text += cuadriplos.realizar_operacion(vnombre, vvalor, vvalor.ElementAt(i).Replace(" ", "")) + " ";
+                                }
+                             
                                 //consola.Text += realizar_operacion(vvalor.ElementAt(i).Replace(" ","")) + " ";
                                 
                             }
@@ -516,6 +478,7 @@ namespace analizador_gramaticaunidad1
                     if (norepetir==true) {
                         vtipo.Add(tipo);
                         vnombre.Add(nombre);
+                        MessageBox.Show(valor);
                         vvalor.Add(valor);
                        
                     }
@@ -624,6 +587,7 @@ namespace analizador_gramaticaunidad1
                 vnombre.Clear();
                 vvalor.Clear();
                 vtipo.Clear();
+                errorcodigo = true;
                 ktf.Kuto codigo = new ktf.Kuto(entrada2.Text);
                 codigo = codigo.Extract("public static void main(String []args){", "}endmain");
               // MessageBox.Show(codigo.ToString());
