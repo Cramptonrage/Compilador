@@ -41,7 +41,7 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
             var reservadacontinue = "continue";
             var reservadadefault = "default";
             var reservadado = "do";
-            var reservadadouble = ":double";
+            var reservadadouble = "double";
             var reservadaelse = "else";
             var reservadaenum = "enum";
             var reservadaextends = "extends";

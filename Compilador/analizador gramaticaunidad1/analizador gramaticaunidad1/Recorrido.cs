@@ -9,10 +9,14 @@ namespace analizador_gramaticaunidad1
 {
     class Recorrido
     {
-        public static void reolveroperacion(ParseTreeNode root)
+        public  Double reolveroperacion(ParseTreeNode root)
         {
-          //  MessageBox.Show("El resultado es: " + expresion(root.ChildNodes.ElementAt(0)));
-            Program.resultado = Convert.ToString(expresion(root.ChildNodes.ElementAt(0)));
+            //  MessageBox.Show("El resultado es: " + expresion(root.ChildNodes.ElementAt(0)));
+          //  Program.resultado = Convert.ToString(expresion(root.ChildNodes.ElementAt(0)));
+          Double aux= expresion(root.ChildNodes.ElementAt(0));
+            MessageBox.Show(aux.ToString());
+            return expresion(root.ChildNodes.ElementAt(0));
+
         }
         private static Double expresion(ParseTreeNode root)
         {

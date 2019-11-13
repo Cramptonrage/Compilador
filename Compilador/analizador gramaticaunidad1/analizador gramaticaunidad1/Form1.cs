@@ -250,39 +250,50 @@ namespace analizador_gramaticaunidad1
 
         public void imprimir(String entrada)
         {
-          //  MessageBox.Show("imprimir");
-          
-            
-               
+
+            if (!entrada.Replace(" ","").Equals("")) {
+                bool no_se_encontro = false;
+
                 if (entrada.Contains("\""))
                 {
-                //imprimir valores de tipo cadena-------------------------------------
-                //MessageBox.Show(codigo.Extract("\"", "\"").ToString());
-                //  MessageBox.Show("ss");
-                ktf.Kuto codigo = new ktf.Kuto(entrada);
-                consola.Text += codigo.Extract("\"", "\"").ToString() + " ";
+                    //imprimir valores de tipo cadena-------------------------------------
+                    //MessageBox.Show(codigo.Extract("\"", "\"").ToString());
+                    //  MessageBox.Show("ss");
+                    ktf.Kuto codigo = new ktf.Kuto(entrada);
+                    consola.Text += codigo.Extract("\"", "\"").ToString() + " ";
+                    no_se_encontro = true;
                 }
                 else
                 {
-                  
+
                     for (int i = 0; i < vnombre.Count; i++)
                     {
                         if (entrada.Equals(vnombre.ElementAt(i)) && !vvalor.ElementAt(i).Equals(""))
                         {
-                        // MessageBox.Show("resultado " + "-"+vvalor.ElementAt(i)+"-");
-                        if (vvalor.ElementAt(i).Contains("\""))
-                        {
-                            ktf.Kuto codigo = new ktf.Kuto(vvalor.ElementAt(i));
-                            consola.Text += codigo.Extract("\"", "\"").ToString() + " ";
-                        }
-                        else { consola.Text += realizar_operacion(vvalor.ElementAt(i).Replace(" ","")) + " "; }
-                            
+                            // MessageBox.Show("resultado " + "-"+vvalor.ElementAt(i)+"-");
+                            if (vvalor.ElementAt(i).Contains("\""))
+                            {
+                                ktf.Kuto codigo = new ktf.Kuto(vvalor.ElementAt(i));
+                                consola.Text += codigo.Extract("\"", "\"").ToString() + " ";
+                                
+                            }
+                            else {
+                                cuadruplos_intermedio cuadriplos = new cuadruplos_intermedio();
+                                consola.Text += cuadriplos.realizar_operacion(vnombre, vvalor, vvalor.ElementAt(i).Replace(" ", "")) + " ";
+                                //consola.Text += realizar_operacion(vvalor.ElementAt(i).Replace(" ","")) + " ";
+                                
+                            }
+                            no_se_encontro = true;
                         }
                     }
 
                 }
-              
-            
+                if (no_se_encontro == false)
+                {
+                    errorcodigo = false;
+                    consola.Text = "ERROR NO SE ENCONTRO LA VARIABLE";
+                }
+            }
         }
         //--------------------------------------con este metodo se extraen las condicionales if
         public void extraervaloesif(String entrada)
@@ -531,7 +542,9 @@ namespace analizador_gramaticaunidad1
             {
 
                 // pictureBox1.Image = sintatico.getImage(resultado);
-                Recorrido.reolveroperacion(arbol);
+                Recorrido eracion = new Recorrido();
+                // Recorrido.reolveroperacion(arbol);
+                MessageBox.Show(eracion.reolveroperacion(arbol).ToString());
                 resultado= Program.resultado;
             }
             else
@@ -688,24 +701,7 @@ namespace analizador_gramaticaunidad1
 
                 }
 
-                /* if (linea.Contains("startfor"))
-                 {
-                     ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
-                     relizarcondicional = relizarcondicional.Extract("startfor", "}endfor");
-                     extraer_variables_delFor(relizarcondicional.ToString());
-                     break;
-                 }
-                 else
-                 {
-                     if (linea.Contains("higigh"))
-                     {
-                         ktf.Kuto relizarcondicional = new ktf.Kuto(entrada2.Text);
-                         relizarcondicional = relizarcondicional.Extract("startif", "}endif");
-                         extraervaloesif(relizarcondicional.ToString());
-                         break;
-                     }
-
-                 }*/
+               
                  if (linea.Contains("ReadLine") && acumuladordelineas == 0|| linea.Contains("readline") && acumuladordelineas == 0)
                  {
                      ktf.Kuto linea2 = new ktf.Kuto(linea);
@@ -721,10 +717,7 @@ namespace analizador_gramaticaunidad1
                     }
 
                  }
-                if (linea.Contains("+") && !linea.Contains("startfor"))
-                {
-                    preparar_operacion(linea);
-                }
+               
                // MessageBox.Show("----"+linea);
                 if (linea.Contains("print")&& acumuladordelineas == 0 && !linea.Contains("startfor"))
                 {
@@ -855,7 +848,7 @@ namespace analizador_gramaticaunidad1
                                 contavariables++;
 
                                 break;
-
+                               
                             }
                         }
                     }
