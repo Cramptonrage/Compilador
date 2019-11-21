@@ -19,7 +19,7 @@ namespace analizador_gramaticaunidad1
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PERAcode());
+            Application.Run(new inicio());
         }
     }
 }

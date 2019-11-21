@@ -11,14 +11,19 @@ using analizador_gramaticaunidad1.sql.com.analizador;
 using Irony.Parsing;
 using System.IO;
 using System.Threading;
+using System.Speech.Synthesis;
 using System.Text.RegularExpressions;
 
 namespace analizador_gramaticaunidad1
 {
     public partial class PERAcode : Form
     {
+
+        SpeechSynthesizer synthesizer = new SpeechSynthesizer();
+        List<VoiceInfo> vocesInfo = new List<VoiceInfo>();
         RegexLexer csLexer = new RegexLexer();
         bool errorcodigo = true;
+        bool load;
       public static   List<string> vtipo = new List<string>();
        public static List<string> vnombre = new List<string>();
        public static List<string> vvalor = new List<string>();
@@ -26,14 +31,23 @@ namespace analizador_gramaticaunidad1
         {
            
             InitializeComponent();
+            
         }
         //
-        bool load;
+      
         List<string> palabrasReservadas;
 
-        
+        private void Speedtext(String speed)
+        {
+            synthesizer.SelectVoice("Microsoft Sabina Desktop");
+            //MessageBox.Show("volumen "+Volumen+" Rate"+Rate);
+            synthesizer.Volume = 100;
+            synthesizer.Rate = 0;
+            synthesizer.Speak(speed);
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             // Add the keywords to the list.
             entrada2.Settings.Keywords.Add("function");
             entrada2.Settings.Keywords.Add("startif");
@@ -116,13 +130,13 @@ namespace analizador_gramaticaunidad1
                 load = true;
                 AnalizeCode();
                 entrada2.Focus();
-               /* lvToken.Columns[0].Width = 250;
-                lvToken.Columns[1].Width = 200;
-                lvToken.Columns[2].Width = 50;
-                lvToken.Columns[3].Width = 50;
-                lvToken.Columns[4].Width = 100;*/
+                /* lvToken.Columns[0].Width = 250;
+                 lvToken.Columns[1].Width = 200;
+                 lvToken.Columns[2].Width = 50;
+                 lvToken.Columns[3].Width = 50;
+                 lvToken.Columns[4].Width = 100;*/
 
-
+                
             }
         }
        public void modificarTexBox()
@@ -190,7 +204,6 @@ namespace analizador_gramaticaunidad1
                 }
                 else
                 {
-                    
                     imprimir(imprimir2.ToString());
                 }
             }
@@ -199,7 +212,7 @@ namespace analizador_gramaticaunidad1
 
         public void imprimir(String entrada)
         {
-
+            //MessageBox.Show(entrada);
             if (!entrada.Replace(" ","").Equals("")) {
                 bool no_se_encontro = false;
 
@@ -231,15 +244,28 @@ namespace analizador_gramaticaunidad1
                                 concatenacion concatenar = new concatenacion();
 
                                 if (vtipo.ElementAt(i).Equals("String")&&vvalor.ElementAt(i).Contains("+")) {
-                                    consola.Text =concatenar.concatenar(vtipo, vnombre, vvalor, vvalor.ElementAt(i)) + " ";
+
+                                    consola.Text +=concatenar.concatenar(vtipo, vnombre, vvalor, vvalor.ElementAt(i)) + " ";
+                                    if (consola.Text.Contains("ERROR"))
+                                    {
+                                        Speedtext("error al concatenar variables");
+                                    }
                                 }
                                 if (vtipo.ElementAt(i).Equals("Double"))
                                 {
                                     consola.Text += cuadriplos.realizar_operacion(vnombre, vvalor, vvalor.ElementAt(i).Replace(" ", "")) + " ";
+                                    if (consola.Text.Contains("ERROR"))
+                                    {
+                                        Speedtext("error al relizar operacion");
+                                    }
                                 }
                                 if (vtipo.ElementAt(i).Equals("int"))
                                 {
                                     consola.Text += cuadriplos.realizar_operacion(vnombre, vvalor, vvalor.ElementAt(i).Replace(" ", "")) + " ";
+                                    if (consola.Text.Contains("ERROR"))
+                                    {
+                                        Speedtext("error al relizar operacion");
+                                    }
                                 }
                              
                                 //consola.Text += realizar_operacion(vvalor.ElementAt(i).Replace(" ","")) + " ";
@@ -253,7 +279,9 @@ namespace analizador_gramaticaunidad1
                 if (no_se_encontro == false)
                 {
                     errorcodigo = false;
-                    consola.Text = "ERROR NO SE ENCONTRO LA VARIABLE";
+                   // MessageBox.Show("no declarada");
+                    consola.Text = "VARIABLE NO DECLARADA CON ANTERIORIDAD";
+                    Speedtext("VARIABLE NO DECLARADA CON ANTERIORIDAD");
                 }
             }
         }
@@ -304,81 +332,126 @@ namespace analizador_gramaticaunidad1
 
         public void condicionalif(String v1, String v2, String comp, String salida1, String salida2)
         {
-          //  String salida = "";
+            //  String salida = "";
+            bool error = false;
+            cuadruplos_intermedio cuadruplos = new cuadruplos_intermedio();
             v1 = v1.Replace(" ", "");
             v2 = v2.Replace(" ", "");
             double intv1 = 0;
             double intv2 = 0;
-            int encontrarvariables = 0;
             try
             {
                 intv1 = Convert.ToDouble(v1);
-                encontrarvariables++;
-                intv2 = Convert.ToDouble(v2);
-                encontrarvariables++;
+                /*intv2 = Convert.ToDouble(v2);
+                encontrarvariables++;*/
+            }
+          
+            catch (Exception e)
+            {
+
+                for (int i = 0; i < vvalor.Count; i++)
+                {
+                    if (v1.Equals(vnombre[i]))
+                    {
+                        
+                        if (vvalor[i].Replace(" ", "").Equals("")|| vvalor[i].Contains("\""))
+                        {
+                          //  MessageBox.Show("-"+vvalor[i]+"-");
+                            errorcodigo = false;
+                            error = true;
+                            consola.Text = "ERROR EN EL IF";
+                            Speedtext("error en la condicional if");
+                            break;
+                        }
+                        //MessageBox.Show(vvalor[i]);
+                        try
+                        {
+                            intv1 = Convert.ToDouble(vvalor[i]);
+                        }catch(Exception d)
+                        {
+                            intv1= Convert.ToDouble(cuadruplos.realizar_operacion(vnombre, vvalor, vvalor[i]));
+                           // MessageBox.Show(cuadruplos.realizar_operacion(vnombre, vvalor, vvalor[i]));
+                        }
+                          
+                    }
+                }
+            }
+            try
+            {
+                intv2 = Convert.ToDouble(v1);
+                /*intv2 = Convert.ToDouble(v2);
+                encontrarvariables++;*/
             }
             catch (Exception e)
             {
-                for (int i = 0; i < vnombre.Count; i++)
-                {
 
-                    if (vnombre.ElementAt(i).Equals(v1) && !vvalor.ElementAt(i).Equals("")&& encontrarvariables==0)
+                for (int i = 0; i < vvalor.Count; i++)
+                {
+                    if (v2.Equals(vnombre[i]))
                     {
-                        intv1 = Convert.ToDouble(realizar_operacion(vvalor.ElementAt(i)));
-                        encontrarvariables++;
-                    }
-                    if (vnombre.ElementAt(i).Equals(v2) && !vvalor.ElementAt(i).Equals(""))
-                    {
-                        intv2 = Convert.ToDouble(realizar_operacion(vvalor.ElementAt(i)));
-                        encontrarvariables++;
-                    }
-                }
-            }
-          
-            if (encontrarvariables!=2)
-            {
-                //entrada.ForeColor = Color.Red;
-                consola.Text = "error";
-            }
+                        if (vvalor[i].Replace(" ","").Equals("") || vvalor[i].Contains("\""))
+                        {
+                           // MessageBox.Show("-" + vvalor[i] + "-");
+                            errorcodigo = false;
+                            error = true;
+                            consola.Text = "ERROR EN EL IF";
+                            Speedtext("error en la condicional if");
+                            break;
+                        }
+                       // MessageBox.Show(vvalor[i]);
+                        try
+                        {
+                            intv2 = Convert.ToDouble(vvalor[i]);
+                        }
+                        catch (Exception d)
+                        {
+                            intv2 = Convert.ToDouble(cuadruplos.realizar_operacion(vnombre, vvalor, vvalor[i]));
+                            // MessageBox.Show(cuadruplos.realizar_operacion(vnombre, vvalor, vvalor[i]));
+                        }
 
-            if (comp.Equals(">"))
-            {
-                if (intv1 > intv2)
-                {
-                    analizarcodigo(salida1);
-                    
-                }
-                else
-                {
-                    analizarcodigo(salida2);
-                    //salida = salida2;
+                    }
                 }
             }
-            if (comp.Equals("<"))
+            if (error == false)
             {
-                if (intv1 < intv2)
+                if (comp.Equals(">"))
                 {
-                    analizarcodigo(salida1);
+                    if (intv1 > intv2)
+                    {
+                        analizarcodigo(salida1);
+
+                    }
+                    else
+                    {
+                        analizarcodigo(salida2);
+                        //salida = salida2;
+                    }
                 }
-                else
+                if (comp.Equals("<"))
                 {
-                    analizarcodigo(salida2);
-                    //salida = salida2;
+                    if (intv1 < intv2)
+                    {
+                        analizarcodigo(salida1);
+                    }
+                    else
+                    {
+                        analizarcodigo(salida2);
+                        //salida = salida2;
+                    }
+                }
+                if (comp.Equals("=="))
+                {
+                    if (intv1 == intv2)
+                    {
+                        analizarcodigo(salida1);
+                    }
+                    else
+                    {
+                        analizarcodigo(salida2);
+                        //salida = salida2;
+                    }
                 }
             }
-            if (comp.Equals("=="))
-            {
-                if (intv1 == intv2)
-                {
-                    analizarcodigo(salida1);
-                }
-                else
-                {
-                    analizarcodigo(salida2);
-                    //salida = salida2;
-                }
-            }
-        
         }
 
         public bool norepetir(String entrada)
@@ -406,7 +479,14 @@ namespace analizador_gramaticaunidad1
                 String valor = scrapper2.Extract("=", "").ToString();
                 tipo = tipo.Replace(" ", "");
                 nombre = nombre.Replace(" ", "");
-                valor = valor.Replace(" ", "");
+                   
+                    if (!valor.Contains("\""))
+                    {
+                        valor = valor.Replace(" ", "");
+
+
+                    }
+               
                 //int k;
                 if (nombre.Equals("") && valor.Equals(""))
                 {
@@ -426,7 +506,10 @@ namespace analizador_gramaticaunidad1
                 if (nombre.Equals("if") || nombre.Equals("for") || nombre.Equals("while") || nombre.Equals("case") || nombre.Equals("int")
                     || nombre.Equals("double") || nombre.Equals("float") || nombre.Equals("String"))
                 {
-                    Program.excepcion = "NO SE PUEDEN DECLARAR PALABRAS RESERVADAS";
+                  
+                        consola.Text = "NO SE PUEDEN DECLARAR PALABRAS RESERVADAS";
+                        Speedtext("no se pueden declarar palabras reservadas");
+                        errorcodigo = false;
                     return false;
 
                 }
@@ -436,7 +519,8 @@ namespace analizador_gramaticaunidad1
                     if (vnombre.ElementAt(j).Equals(nombre) && tipo != "")
                     {
                         consola.Text="NO SE PUEDE DECLARAR LA MISMA VARIABLE";
-                        return false;
+                        Speedtext("NO SE PUEDE DECLARAR LA MISMA VARIABLE");
+                            return false;
                     }
                     if (tipo.Equals("") && nombre.Equals(vnombre.ElementAt(j)))
                     {
@@ -445,7 +529,18 @@ namespace analizador_gramaticaunidad1
                         retorno = 1;
                         try
                         {
-                            if (vtipo.ElementAt(j).Equals("int"))
+                            if (vtipo.ElementAt(j).Equals("String"))
+                            {
+                                    if (!valor.Contains("\""))
+                                    {
+                                        consola.Text = "ERROR DE TIPO DE DATO";
+                                        Speedtext("ERROR DE TIPO DE DATO");
+                                        errorcodigo = false;
+                                        break;
+                                       
+                                    }
+                            }
+                                if (vtipo.ElementAt(j).Equals("int"))
                             {
 
                                 Convert.ToInt32(valor);
@@ -464,7 +559,8 @@ namespace analizador_gramaticaunidad1
 
                             } catch (Exception e) {
                                 consola.Text = "ERROR DE TIPO DE DATO";
-                            return false;
+                                Speedtext("ERROR DE TIPO DE DATO");
+                                return false;
                         }
 
                         break;
@@ -474,11 +570,15 @@ namespace analizador_gramaticaunidad1
                         if (tipo.Equals("") && retorno != 1)
                         {
                             retorno = 3;
+                            consola.Text = "ERROR AL ENCONTRAR VARIABLE";
+                            Speedtext("error al encontrar variable");
+                            return false; 
+                               
                         } } }
                     if (norepetir==true) {
                         vtipo.Add(tipo);
                         vnombre.Add(nombre);
-                        MessageBox.Show(valor);
+                     //hextra   MessageBox.Show(valor);
                         vvalor.Add(valor);
                        
                     }
@@ -617,8 +717,8 @@ namespace analizador_gramaticaunidad1
                 {
                     break;
                 }
-               // MessageBox.Show(linea);
-               // MessageBox.Show(linea);
+                // MessageBox.Show(linea);
+                // MessageBox.Show(linea);
                 if (linea.Contains(";")&&!linea.Contains("startfor")&&!linea.Contains("print")&& !linea.Contains("ReadLine"))
                 {
                     if (norepetir(linea)==false)
@@ -670,13 +770,14 @@ namespace analizador_gramaticaunidad1
                  {
                      ktf.Kuto linea2 = new ktf.Kuto(linea);
                      String variable = linea2.Extract("", "=").ToString().Replace(" ", "");
-                     String lol = Microsoft.VisualBasic.Interaction.InputBox("INGRESE VALOR DE " + variable, "ENTRADA", "LOL");
+                     String entrada = Microsoft.VisualBasic.Interaction.InputBox("INGRESE VALOR DE " + variable, "ENTRADA", "");
 
 
-                    if( remplazar_variable_valor(variable, lol)==false)
+                    if( remplazar_variable_valor(variable, entrada)==false)
                     {
                         errorcodigo = false;
                         consola.Text = "ERROR AL INGRESAR VARIABLE";
+                        Speedtext("error al ingresar variable");
                         break;
                     }
 
@@ -688,7 +789,10 @@ namespace analizador_gramaticaunidad1
                     //MessageBox.Show("imprimir "+acumuladordelineas);
                     imprimir1(linea);
                 }
-                
+                if (errorcodigo == false)
+                {   
+                    break;
+                }
             }
         }
         public bool remplazar_variable_valor(String linea, String Valor)
@@ -875,6 +979,11 @@ namespace analizador_gramaticaunidad1
             {
                 MessageBox.Show(vtipo.ElementAt(i) + " - " + vnombre.ElementAt(i) + " - " + vvalor.ElementAt(i));
             }
+        }
+
+        private void pictureBox7_Click(object sender, EventArgs e)
+        {
+            entrada2.Clear();
         }
     }
 }

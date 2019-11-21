@@ -192,3 +192,4 @@ C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\an
 C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.csproj.CopyComplete
 C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.exe
 C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador gramaticaunidad1.pdb
+C:\Users\oscar\Source\Repos\Compilador\Compilador\analizador gramaticaunidad1\analizador gramaticaunidad1\obj\Debug\analizador_gramaticaunidad1.inicio.resources

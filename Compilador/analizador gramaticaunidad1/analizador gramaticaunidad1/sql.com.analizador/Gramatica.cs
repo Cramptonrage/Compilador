@@ -216,6 +216,7 @@ namespace analizador_gramaticaunidad1.sql.com.analizador
             | reservadadouble + id + ToTerm(";") + DECLARACION
             | reservadaboolean + id + ToTerm(";") + DECLARACION
             | ToTerm("String") + id + ToTerm(";") + DECLARACION
+            | ToTerm("int") + id + reservadaigual + OPERACIONES + ToTerm(";") + DECLARACION
             | ToTerm("String") + id + reservadaigual + OPERACIONES + ToTerm(";") + DECLARACION
             | ToTerm("print") + ToTerm("(") + SALIDAMENSAJE + ToTerm(")") + reservadapuntoycoma + DECLARACION
             | id + reservadaigual + ToTerm("ReadLine") + ToTerm(";") + DECLARACION
